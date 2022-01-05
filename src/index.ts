@@ -21,7 +21,9 @@ async function createIssue({ issue }: { issue: any }) {
 
   const { data } = await axios({
     url: LINEAR_API_URL,
-    data: createIssueTemplate({ teamId, stateId, description: issue.body, title: issue.title }),
+    data: JSON.stringify({
+      query: createIssueTemplate({ teamId, stateId, description: issue.body, title: issue.title }),
+    }),
     headers: {
       Authorization: linearAPIToken,
       "Content-Type": "application/json",

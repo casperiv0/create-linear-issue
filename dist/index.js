@@ -12499,7 +12499,9 @@ async function createIssue({ issue }) {
     const stateId = (0, core_1.getInput)("state-id", { required: true });
     const { data } = await (0, axios_1.default)({
         url: LINEAR_API_URL,
-        data: createIssueTemplate({ teamId, stateId, description: issue.body, title: issue.title }),
+        data: JSON.stringify({
+            query: createIssueTemplate({ teamId, stateId, description: issue.body, title: issue.title }),
+        }),
         headers: {
             Authorization: linearAPIToken,
             "Content-Type": "application/json",
