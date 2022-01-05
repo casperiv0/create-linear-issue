@@ -23,45 +23,43 @@ async function createIssue({ issue }: { issue: any }) {
     issue: { id: issue.id, description: issue.body, title: issue.title },
   });
 
-  const template = createIssueTemplate({
-    teamId,
-    stateId,
-    description: issue.body,
-    title: issue.title,
+  const body = JSON.stringify({
+    query: `mutation IssueCreate($title: String!, $description: String!, $teamId: String!, $stateId: String!) {
+      issueCreate(
+          input: {
+              title: $title
+              description: $description
+              teamId: $teamId
+              stateId: $stateId
+          }
+      ) {
+          success
+      }
+  }`,
+    variables: {
+      title: issue.title,
+      description: issue.body,
+      teamId,
+      stateId,
+    },
   });
 
-  const { data } = await axios({
+  const { data, request } = await axios({
     url: LINEAR_API_URL,
     method: "POST",
-    data: JSON.stringify({
-      query: template,
-      variables: {},
-    }),
+    data: body,
     headers: {
       Authorization: linearAPIToken,
       "Content-Type": "application/json",
     },
   });
 
+  console.debug({ request, data });
+
   if (data.success) {
     console.log("Successfully created the issue!");
   }
 }
-
-const createIssueTemplate = ({ title, description, teamId, stateId }: CreateIssueOptions) => `
-  mutation IssueCreate {
-    issueCreate(
-        input: {
-            title: "${title}"
-            description: "${description}"
-            teamId: "${teamId}"
-            stateId: "${stateId}"
-        }
-    ) {
-        success
-    }
-  }
-`;
 
 try {
   main();
@@ -71,11 +69,4 @@ try {
   if (err instanceof Error) {
     setFailed(err.message);
   }
-}
-
-interface CreateIssueOptions {
-  title: string;
-  description: string;
-  teamId: string;
-  stateId: string;
 }
