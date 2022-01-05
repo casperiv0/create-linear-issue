@@ -19,7 +19,9 @@ async function createIssue({ issue }: { issue: any }) {
   const teamId = getInput("team-id", { required: true });
   const stateId = getInput("state-id", { required: true });
 
-  console.log("issue data: ", { issue });
+  console.debug("issue data: ", {
+    issue: { id: issue.id, description: issue.body, title: issue.title },
+  });
 
   const template = createIssueTemplate({
     teamId,
@@ -28,7 +30,7 @@ async function createIssue({ issue }: { issue: any }) {
     title: issue.title,
   });
 
-  const { data, request } = await axios({
+  const { data } = await axios({
     url: LINEAR_API_URL,
     method: "POST",
     data: JSON.stringify({
@@ -40,8 +42,6 @@ async function createIssue({ issue }: { issue: any }) {
       "Content-Type": "application/json",
     },
   });
-
-  console.log({ request });
 
   if (data.success) {
     console.log("Successfully created the issue!");

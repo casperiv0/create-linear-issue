@@ -12497,14 +12497,16 @@ async function createIssue({ issue }) {
     const linearAPIToken = (0, core_1.getInput)("linear-api-token", { required: true });
     const teamId = (0, core_1.getInput)("team-id", { required: true });
     const stateId = (0, core_1.getInput)("state-id", { required: true });
-    console.log("issue data: ", { issue });
+    console.debug("issue data: ", {
+        issue: { id: issue.id, description: issue.body, title: issue.title },
+    });
     const template = createIssueTemplate({
         teamId,
         stateId,
         description: issue.body,
         title: issue.title,
     });
-    const { data, request } = await (0, axios_1.default)({
+    const { data } = await (0, axios_1.default)({
         url: LINEAR_API_URL,
         method: "POST",
         data: JSON.stringify({
@@ -12516,7 +12518,6 @@ async function createIssue({ issue }) {
             "Content-Type": "application/json",
         },
     });
-    console.log({ request });
     if (data.success) {
         console.log("Successfully created the issue!");
     }
