@@ -13,14 +13,13 @@ async function main() {
   await createIssue({ issue });
 }
 
-// todo: add types
 async function createIssue({ issue }: { issue: any }) {
   const linearAPIToken = getInput("linear-api-token", { required: true });
   const teamId = getInput("team-id", { required: true });
   const stateId = getInput("state-id", { required: true });
 
   console.debug("issue data: ", {
-    issue: { id: issue.id, description: issue.body, title: issue.title },
+    issue: { id: issue.id, description: issue.body ?? "", title: issue.title },
   });
 
   const body = JSON.stringify({
@@ -44,7 +43,7 @@ async function createIssue({ issue }: { issue: any }) {
     },
   });
 
-  const { data, request } = await axios({
+  const { data } = await axios({
     url: LINEAR_API_URL,
     method: "POST",
     data: body,
@@ -53,8 +52,6 @@ async function createIssue({ issue }: { issue: any }) {
       "Content-Type": "application/json",
     },
   });
-
-  console.debug({ request, data });
 
   if (data.success) {
     console.log("Successfully created the issue!");

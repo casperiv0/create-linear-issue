@@ -12492,13 +12492,13 @@ async function main() {
     }
     await createIssue({ issue });
 }
-// todo: add types
 async function createIssue({ issue }) {
+    var _a;
     const linearAPIToken = (0, core_1.getInput)("linear-api-token", { required: true });
     const teamId = (0, core_1.getInput)("team-id", { required: true });
     const stateId = (0, core_1.getInput)("state-id", { required: true });
     console.debug("issue data: ", {
-        issue: { id: issue.id, description: issue.body, title: issue.title },
+        issue: { id: issue.id, description: (_a = issue.body) !== null && _a !== void 0 ? _a : "", title: issue.title },
     });
     const body = JSON.stringify({
         query: `mutation IssueCreate($title: String!, $description: String!, $teamId: String!, $stateId: String!) {
@@ -12520,7 +12520,7 @@ async function createIssue({ issue }) {
             stateId,
         },
     });
-    const { data, request } = await (0, axios_1.default)({
+    const { data } = await (0, axios_1.default)({
         url: LINEAR_API_URL,
         method: "POST",
         data: body,
@@ -12529,7 +12529,6 @@ async function createIssue({ issue }) {
             "Content-Type": "application/json",
         },
     });
-    console.debug({ request, data });
     if (data.success) {
         console.log("Successfully created the issue!");
     }
