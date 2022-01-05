@@ -12508,6 +12508,7 @@ async function createIssue({ issue }) {
             "Content-Type": "application/json",
         },
     });
+    // console.log({ request: JSON.stringify(request) });
     if (data.success) {
         console.log("Successfully created the issue!");
     }
@@ -12516,10 +12517,10 @@ const createIssueTemplate = ({ title, description, teamId, stateId }) => `
   mutation IssueCreate {
     issueCreate(
         input: {
-            title: ${title}
-            description: ${description}
-            teamId: ${teamId}
-            stateId: ${stateId}
+            title: "${title}"
+            description: "${description}"
+            teamId: "${teamId}"
+            stateId: "${stateId}"
         }
     ) {
         success

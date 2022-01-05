@@ -31,6 +31,8 @@ async function createIssue({ issue }: { issue: any }) {
     },
   });
 
+  // console.log({ request: JSON.stringify(request) });
+
   if (data.success) {
     console.log("Successfully created the issue!");
   }
@@ -40,10 +42,10 @@ const createIssueTemplate = ({ title, description, teamId, stateId }: CreateIssu
   mutation IssueCreate {
     issueCreate(
         input: {
-            title: ${title}
-            description: ${description}
-            teamId: ${teamId}
-            stateId: ${stateId}
+            title: "${title}"
+            description: "${description}"
+            teamId: "${teamId}"
+            stateId: "${stateId}"
         }
     ) {
         success
