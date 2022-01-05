@@ -21,6 +21,7 @@ async function createIssue({ issue }: { issue: any }) {
 
   const { data } = await axios({
     url: LINEAR_API_URL,
+    method: "POST",
     data: JSON.stringify({
       query: createIssueTemplate({ teamId, stateId, description: issue.body, title: issue.title }),
     }),
