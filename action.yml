@@ -1,0 +1,16 @@
+name: "Create Linear Issue"
+description: "Automatically import a created GitHub issue into Linear."
+inputs:
+  linear-api-token:
+    description: "The API key to your Linear team"
+    required: true
+  team-id:
+    description: "The id to your Linear team"
+    required: true
+  state-id:
+    description: "The id of what state must be applied (state: 'Todo', 'In Progress', etc)"
+    required: true
+
+runs:
+  using: "node12"
+  main: "dist/index.js"
