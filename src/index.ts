@@ -61,9 +61,11 @@ async function createIssue({ issue }: { issue: any }) {
 try {
   main();
 } catch (err) {
-  console.log({ err });
+  console.error({ err });
 
   if (err instanceof Error) {
     setFailed(err.message);
   }
+
+  setFailed("Could not create the Linear issue. Unknown error");
 }

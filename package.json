@@ -12,13 +12,13 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
-    "axios": "^0.24.0"
+    "axios": "^0.26.0"
   },
   "devDependencies": {
     "@casper124578/eslint-config": "^2.3.2",
-    "@vercel/ncc": "^0.33.1",
-    "eslint": "^8.6.0",
+    "@vercel/ncc": "^0.33.3",
+    "eslint": "^8.9.0",
     "prettier": "^2.5.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.5"
   }
 }

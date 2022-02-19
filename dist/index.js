@@ -12537,10 +12537,11 @@ try {
     main();
 }
 catch (err) {
-    console.log({ err });
+    console.error({ err });
     if (err instanceof Error) {
         (0, core_1.setFailed)(err.message);
     }
+    (0, core_1.setFailed)("Could not create the Linear issue. Unknown error");
 }
 
 
