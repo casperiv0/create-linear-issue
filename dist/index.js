@@ -12481,6 +12481,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createIssue = void 0;
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
@@ -12493,12 +12494,12 @@ async function main() {
     await createIssue({ issue });
 }
 async function createIssue({ issue }) {
-    var _a;
+    var _a, _b, _c;
     const linearAPIToken = (0, core_1.getInput)("linear-api-token", { required: true });
     const teamId = (0, core_1.getInput)("team-id", { required: true });
     const stateId = (0, core_1.getInput)("state-id", { required: true });
     console.debug("issue data: ", {
-        issue: { id: issue.id, description: (_a = issue.body) !== null && _a !== void 0 ? _a : "", title: issue.title },
+        issue,
     });
     const body = JSON.stringify({
         query: `mutation IssueCreate($title: String!, $description: String!, $teamId: String!, $stateId: String!) {
@@ -12511,6 +12512,9 @@ async function createIssue({ issue }) {
           }
       ) {
           success
+          issue {
+            id
+          }
       }
   }`,
         variables: {
@@ -12529,10 +12533,16 @@ async function createIssue({ issue }) {
             "Content-Type": "application/json",
         },
     });
-    if (data.success) {
+    if (data.data.issueCreate.success) {
         console.log("Successfully created the issue!");
+        const url = issue.html_url;
+        const issueId = (_c = (_b = (_a = data.data) === null || _a === void 0 ? void 0 : _a.issueCreate) === null || _b === void 0 ? void 0 : _b.issue) === null || _c === void 0 ? void 0 : _c.id;
+        if (issueId) {
+            await attachGitHubURLToIssue(url, issueId, linearAPIToken);
+        }
     }
 }
+exports.createIssue = createIssue;
 try {
     main();
 }
@@ -12542,6 +12552,33 @@ catch (err) {
         (0, core_1.setFailed)(err.message);
     }
     (0, core_1.setFailed)("Could not create the Linear issue. Unknown error");
+}
+async function attachGitHubURLToIssue(url, issueId, apiToken) {
+    const body = JSON.stringify({
+        query: `mutation LinkToIssue($url: String!, $issueId: String!, $title: String!) {
+      attachmentLinkURL(url: $url, issueId: $issueId, title: $title
+      ) {
+        attachment {
+          id
+        }
+      }
+  }`,
+        variables: {
+            url,
+            issueId,
+            title: "Original GitHub Issue",
+        },
+    });
+    const { data } = await (0, axios_1.default)({
+        url: LINEAR_API_URL,
+        method: "POST",
+        data: body,
+        headers: {
+            Authorization: apiToken,
+            "Content-Type": "application/json",
+        },
+    });
+    return data;
 }
 
 
