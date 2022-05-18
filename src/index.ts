@@ -56,7 +56,7 @@ export async function createIssue({ issue }: { issue: any }) {
     },
   });
 
-  if (data.data.issueCreate.success) {
+  if (data.data?.issueCreate?.success) {
     console.log("Successfully created the issue!");
 
     const url = issue.html_url;
@@ -65,6 +65,12 @@ export async function createIssue({ issue }: { issue: any }) {
     if (issueId) {
       await attachGitHubURLToIssue(url, issueId, linearAPIToken);
     }
+  } else {
+    setFailed({
+      message: "Unable to create Linear issue. An unexpected error occurred",
+      stack: data.data,
+      name: "CreateLinearIssueError",
+    });
   }
 }
 
