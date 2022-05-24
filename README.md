@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Linear Issue
-        uses: Dev-CasperTheGhost/create-linear-issue@1.1.0
+        uses: Dev-CasperTheGhost/create-linear-issue@1.3.1
         with:
           # from GitHub Secrets within the repo
           linear-api-token: ${{ secrets.LINEAR_API_TOKEN }}
