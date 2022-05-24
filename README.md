@@ -22,7 +22,7 @@ on:
     types: [opened]
 
 jobs:
-  auto-assign:
+  create-linear-issue:
     runs-on: ubuntu-latest
     steps:
       - name: Create Linear Issue
